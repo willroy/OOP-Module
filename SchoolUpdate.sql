@@ -75,4 +75,4 @@ CREATE TABLE TestQuestionMultichoice (
 	FOREIGN KEY(testID) REFERENCES Test(uuid)
 );
 
-select * from TestQuestionText;
+select * from Test;

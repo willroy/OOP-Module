@@ -47,14 +47,14 @@ public class CreateTests extends Application {
         ObservableList<String> options = FXCollections.observableArrayList();
         classes = new ComboBox(options);
         try {
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:school.db");
+            Connection conn1 = DriverManager.getConnection("jdbc:sqlite:school.db");
             String sql = "SELECT * FROM SchoolClass;";
-            Statement stmt  = conn.createStatement();
+            Statement stmt  = conn1.createStatement();
             ResultSet rs    = stmt.executeQuery(sql);
             while (rs.next()) {
                 classes.getItems().add(rs.getString("name"));
             }
-            conn.close();
+            conn1.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -228,16 +228,19 @@ public class CreateTests extends Application {
                 conn.close();
                 for (int i = 0; i < questions.size(); i++) {
                     if ( questions.get(i).getClass() == TestQuestionMultichoice.class ) {
+                        conn = DriverManager.getConnection("jdbc:sqlite:school.db");
                         TestQuestionMultichoice question = (TestQuestionMultichoice)questions.get(i);
                         String incorrectAnswers = "";
                         String correctAnswers = "";
                         for (int a = 0; a < question.getIncorrectAnswers().size(); a++) { incorrectAnswers = incorrectAnswers + question.getIncorrectAnswers().get(a) + ","; }
                         for (int a = 0; a < question.getCorrectAnswers().size(); a++) { correctAnswers = correctAnswers + question.getCorrectAnswers().get(a) + ","; }
                         sql = "INSERT INTO TestQuestionMultichoice(questionNum, testID, question, incorrectAnswers, correctAnswers) " +
-                                "VALUES("+i+", "+(testCount+1)+", "+question.getQuestion()+", "+incorrectAnswers+", "+correctAnswers+")";
+                                "VALUES("+i+", "+(testCount+1)+", '"+question.getQuestion()+"', '"+incorrectAnswers+"', '"+correctAnswers+"')";
+                        System.out.println(sql);
                         stmt  = conn.createStatement();
                         stmt.executeUpdate(sql);
                         conn.close();
+                        System.out.println("2");
                     }
                     if ( questions.get(i).getClass() == TestQuestionText.class ) {
                         TestQuestionText question = (TestQuestionText)questions.get(i);

@@ -39,7 +39,7 @@ public class TakeTests extends Application {
         int schoolClassID = 0;
         try {
             Connection conn = DriverManager.getConnection("jdbc:sqlite:school.db");
-            String sql = "SELECT uuid, username, password FROM User where loggedIn = 1";
+            String sql = "SELECT * FROM User where loggedIn = 1";
             Statement stmt  = conn.createStatement();
             ResultSet rs    = stmt.executeQuery(sql);
             while (rs.next()) {
@@ -51,38 +51,89 @@ public class TakeTests extends Application {
             System.out.println(e.getMessage());
         }
 
-        //get the number of tests that are in the tests database folder
-        File directory=new File("Tests");
-        int fileCount = directory.list().length;
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:school.db");
+            String sql = "SELECT * FROM Test where schoolClassID='"+schoolClassID+"'";
+            Statement stmt  = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
+            int count = 0;
+            while (rs.next()) {
+                //get school class
+                count++;
+                ResultSet classes  = conn.createStatement().executeQuery("SELECT * FROM SchoolClass where uuid='"+schoolClassID+"'");
 
-        int count = 0;
-        for (int i = 0; i < fileCount; i++) {
-            try {
-                //loop through each test and add it to the view if the user and test are in the same class and if it is an active test, which it is by default
-                FileInputStream fileIn = new FileInputStream("Tests/test"+(i+1)+".ser");
-                ObjectInputStream in = new ObjectInputStream(fileIn);
-                Test test = (Test) in.readObject();
+                //get test questions
 
-                if ( test.getSchoolClass() == schoolClassID) { //add isactive test
-                    count++;
-                    Label label = new Label("Test " + count + ", " + test.getSchoolClass());
-                    Button takeTest = new Button("Take Test");
-                    int currentTestNumber = count;
-                    takeTest.setOnAction(e ->takeDetails(primaryStage, test, test.getSchoolClass(), currentTestNumber));
-                    grid.add(label, 0, i);
-                    grid.add(takeTest, 1, i);
+                ResultSet questionsText  = conn.createStatement().executeQuery("SELECT * FROM TestQuestionText where testID='"+rs.getInt("uuid")+"' ORDER BY questionNum");
+                ResultSet questionsMultichoice  = conn.createStatement().executeQuery("SELECT * FROM TestQuestionMultichoice where testID='"+rs.getInt("uuid")+"' ORDER BY questionNum");
+
+                //add test questions to the questions classes
+
+                List<TestQuestion> questions = new ArrayList<TestQuestion>();
+                while (questionsText.next()) {
+                    TestQuestionText tmpquestion = new TestQuestionText(questionsText.getString("question"), questionsText.getString("answer"));
+                    tmpquestion.setQuestionNum(questionsText.getInt("questionNum"));
+                    questions.add(tmpquestion);
                 }
-                in.close();
-                fileIn.close();
-            } catch (IOException a) {
-                a.printStackTrace();
-                return;
-            } catch (ClassNotFoundException c) {
-                System.out.println("test class not found");
-                c.printStackTrace();
-                return;
+
+                while (questionsMultichoice.next()) {
+                    List<String> incorrectAnswers = Arrays.asList(questionsMultichoice.getString("incorrectAnswers").split(",", -1));
+                    List<String> correctAnswers = Arrays.asList(questionsMultichoice.getString("correctAnswers").split(",", -1));
+                    TestQuestionMultichoice tmpquestion = new TestQuestionMultichoice(questionsMultichoice.getString("question"), incorrectAnswers, correctAnswers);
+                    tmpquestion.setQuestionNum(questionsMultichoice.getInt("questionNum"));
+                    questions.add(tmpquestion);
+                }
+
+                questions.sort(Comparator.comparing(TestQuestion::getQuestionNum));
+
+                Label label = new Label("Test " + count + ", " + classes.getString("name"));
+                Button takeTest = new Button("Take Test");
+
+                int currentTestNumber = count;
+                Test currentTest = new Test(schoolClassID, true, questions);
+                int finalSchoolClassID = schoolClassID;
+                takeTest.setOnAction(e ->takeDetails(primaryStage, currentTest, finalSchoolClassID, currentTestNumber));
+                grid.add(label, 0, count);
+                grid.add(takeTest, 1, count);
+
             }
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
+
+        //get the number of tests that are in the tests database folder
+//        File directory=new File("Tests");
+//        int fileCount = directory.list().length;
+//
+//        int count = 0;
+//        for (int i = 0; i < fileCount; i++) {
+//            try {
+//                //loop through each test and add it to the view if the user and test are in the same class and if it is an active test, which it is by default
+//                FileInputStream fileIn = new FileInputStream("Tests/test"+(i+1)+".ser");
+//                ObjectInputStream in = new ObjectInputStream(fileIn);
+//                Test test = (Test) in.readObject();
+//
+//                if ( test.getSchoolClass() == schoolClassID) { //add isactive test
+//                    count++;
+//                    Label label = new Label("Test " + count + ", " + test.getSchoolClass());
+//                    Button takeTest = new Button("Take Test");
+//                    int currentTestNumber = count;
+//                    takeTest.setOnAction(e ->takeDetails(primaryStage, test, test.getSchoolClass(), currentTestNumber));
+//                    grid.add(label, 0, i);
+//                    grid.add(takeTest, 1, i);
+//                }
+//                in.close();
+//                fileIn.close();
+//            } catch (IOException a) {
+//                a.printStackTrace();
+//                return;
+//            } catch (ClassNotFoundException c) {
+//                System.out.println("test class not found");
+//                c.printStackTrace();
+//                return;
+//            }
+//        }
 
         grid.setPadding(new Insets(10, 10, 10, 10));
         Scene scene = new Scene(grid, 300, 250);
