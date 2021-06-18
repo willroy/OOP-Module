@@ -57,7 +57,7 @@ CREATE TABLE Result (
 );
 
 CREATE TABLE TestQuestionText (
-    uuid int PRIMARY KEY,
+    uuid int PRIMARY KEY autoincrement,
     questionNum int,
     testID int,
     question varchar(250),
@@ -66,7 +66,7 @@ CREATE TABLE TestQuestionText (
 );
 
 CREATE TABLE TestQuestionMultichoice (
-    uuid int PRIMARY KEY,
+    uuid int PRIMARY KEY autoincrement,
     questionNum int,
     testID int,
     question varchar(250),
