@@ -74,5 +74,3 @@ CREATE TABLE TestQuestionMultichoice (
     correctAnswers varchar(250),
 	FOREIGN KEY(testID) REFERENCES Test(uuid)
 );
-
-select * from Test;

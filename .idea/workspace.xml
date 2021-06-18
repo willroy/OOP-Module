@@ -5,15 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3044ebd7-f402-4931-a6fd-cf112de5c45d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/javafx.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/javafx.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SchoolUpdate.sql" beforeDir="false" afterPath="$PROJECT_DIR$/SchoolUpdate.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tests/test1.ser" beforeDir="false" afterPath="$PROJECT_DIR$/Tests/test1.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/oop_module.iml" beforeDir="false" afterPath="$PROJECT_DIR$/oop_module.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/school.db" beforeDir="false" afterPath="$PROJECT_DIR$/school.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/models/test/TestQuestion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/models/test/TestQuestion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/views/test/CreateTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/views/test/CreateTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/views/test/TakeTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/views/test/TakeTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

@@ -102,39 +102,6 @@ public class TakeTests extends Application {
             System.out.println(e.getMessage());
         }
 
-        //get the number of tests that are in the tests database folder
-//        File directory=new File("Tests");
-//        int fileCount = directory.list().length;
-//
-//        int count = 0;
-//        for (int i = 0; i < fileCount; i++) {
-//            try {
-//                //loop through each test and add it to the view if the user and test are in the same class and if it is an active test, which it is by default
-//                FileInputStream fileIn = new FileInputStream("Tests/test"+(i+1)+".ser");
-//                ObjectInputStream in = new ObjectInputStream(fileIn);
-//                Test test = (Test) in.readObject();
-//
-//                if ( test.getSchoolClass() == schoolClassID) { //add isactive test
-//                    count++;
-//                    Label label = new Label("Test " + count + ", " + test.getSchoolClass());
-//                    Button takeTest = new Button("Take Test");
-//                    int currentTestNumber = count;
-//                    takeTest.setOnAction(e ->takeDetails(primaryStage, test, test.getSchoolClass(), currentTestNumber));
-//                    grid.add(label, 0, i);
-//                    grid.add(takeTest, 1, i);
-//                }
-//                in.close();
-//                fileIn.close();
-//            } catch (IOException a) {
-//                a.printStackTrace();
-//                return;
-//            } catch (ClassNotFoundException c) {
-//                System.out.println("test class not found");
-//                c.printStackTrace();
-//                return;
-//            }
-//        }
-
         grid.setPadding(new Insets(10, 10, 10, 10));
         Scene scene = new Scene(grid, 300, 250);
         scene.getStylesheets().add("sample/stylesheet.css");
