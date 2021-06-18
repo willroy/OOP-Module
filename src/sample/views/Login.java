@@ -23,15 +23,15 @@ public class Login extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
+        //create username, password and sign in items (text fields and button) for display
         Label userName = new Label("User Name");
         Label password = new Label("Password");
         TextField userTextField =  new TextField();
         TextField passTextField =  new TextField();
         Button btn = new Button("Sign in");
-
+        //go to home method when sign in button is pressed (try to login)
         btn.setOnAction(e->home(primaryStage, userTextField.getText(), passTextField.getText()));
-
+        //create grid pane to display items and do align / padding
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -79,66 +79,6 @@ public class Login extends Application {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
-
-
-
-//
-//
-//        try (Statement stmt  = conn.createStatement();
-//             ResultSet rs    = stmt.executeQuery(sql)){
-//
-//            // loop through the result set
-//            while (rs.next()) {
-//                System.out.println(rs.getInt("uuid") +  "\t" +
-//                                   rs.getString("username") + "\t" +
-//                                   rs.getString("password"));
-//            }
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-
-
-
-//        List<User> users = null;
-//        try {
-//            //get users file
-//            FileInputStream fileIn = new FileInputStream("users.ser");
-//            ObjectInputStream in = new ObjectInputStream(fileIn);
-//            users = (List<User>) in.readObject();
-//            in.close();
-//            fileIn.close();
-//
-//            for (int i = 0; i < users.size(); i++) {
-//                String username = users.get(i).getUsername();
-//
-//                System.out.println( username+ " " + res);
-//                System.out.println(res.getClass());
-//                if ( users.get(i).getUsername().equals(res) ) {
-//                    Home home = new Home();
-//                    try {
-//                        //set current user file as the user logged in as
-//                        FileOutputStream fileOut = new FileOutputStream("currentUser.ser");
-//                        ObjectOutputStream out = new ObjectOutputStream(fileOut);
-//                        out.writeObject(users.get(i));
-//                        out.close();
-//                        fileOut.close();
-//                    } catch (IOException a) {
-//                        a.printStackTrace();
-//                    }
-//                    home.start(primaryStage);
-//                }
-//            }
-//            //handle errors
-//        } catch (IOException i) {
-//            i.printStackTrace();
-//            return;
-//        } catch (ClassNotFoundException c) {
-//            System.out.println("user class not found");
-//            c.printStackTrace();
-//            return;
-//        }
-//        System.out.println("Deserialized users..."+users.size());
     }
 }
 
