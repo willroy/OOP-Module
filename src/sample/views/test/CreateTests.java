@@ -227,18 +227,18 @@ public class CreateTests extends Application {
                 stmt.executeUpdate(sql);
                 conn.close();
                 for (int i = 0; i < questions.size(); i++) {
-//                    if ( questions.get(i).getClass() == TestQuestionMultichoice.class ) {
-//                        TestQuestionMultichoice question = (TestQuestionMultichoice)questions.get(i);
-//                        String incorrectAnswers = "";
-//                        String correctAnswers = "";
-//                        for (int a = 0; a < question.getIncorrectAnswers().size(); a++) { incorrectAnswers = incorrectAnswers + question.getIncorrectAnswers().get(a) + ","; }
-//                        for (int a = 0; a < question.getCorrectAnswers().size(); a++) { correctAnswers = correctAnswers + question.getCorrectAnswers().get(a) + ","; }
-//                        sql = "INSERT INTO TestQuestionMultichoice(questionNum, testID, question, incorrectAnswers, correctAnswers) " +
-//                                "VALUES("+i+", "+(testCount+1)+", "+question.getQuestion()+", "+incorrectAnswers+", "+correctAnswers+")";
-//                        stmt  = conn.createStatement();
-//                        stmt.executeUpdate(sql);
-//                        conn.close();
-//                    }
+                    if ( questions.get(i).getClass() == TestQuestionMultichoice.class ) {
+                        TestQuestionMultichoice question = (TestQuestionMultichoice)questions.get(i);
+                        String incorrectAnswers = "";
+                        String correctAnswers = "";
+                        for (int a = 0; a < question.getIncorrectAnswers().size(); a++) { incorrectAnswers = incorrectAnswers + question.getIncorrectAnswers().get(a) + ","; }
+                        for (int a = 0; a < question.getCorrectAnswers().size(); a++) { correctAnswers = correctAnswers + question.getCorrectAnswers().get(a) + ","; }
+                        sql = "INSERT INTO TestQuestionMultichoice(questionNum, testID, question, incorrectAnswers, correctAnswers) " +
+                                "VALUES("+i+", "+(testCount+1)+", "+question.getQuestion()+", "+incorrectAnswers+", "+correctAnswers+")";
+                        stmt  = conn.createStatement();
+                        stmt.executeUpdate(sql);
+                        conn.close();
+                    }
                     if ( questions.get(i).getClass() == TestQuestionText.class ) {
                         TestQuestionText question = (TestQuestionText)questions.get(i);
                         conn = DriverManager.getConnection("jdbc:sqlite:C://Users/willj/IdeaProjects/untitled/school.db");
