@@ -26,7 +26,7 @@ public class Home extends Application {
 
         User user = null;
         try {
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:C://Users/willj/IdeaProjects/untitled/school.db");
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:school.db");
             String sql = "SELECT * FROM User where loggedIn = 1";
             Statement stmt  = conn.createStatement();
             ResultSet rs    = stmt.executeQuery(sql);

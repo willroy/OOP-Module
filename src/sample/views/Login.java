@@ -58,7 +58,7 @@ public class Login extends Application {
     public void home(Stage primaryStage, String username, String password)
     {
         try {
-            conn = DriverManager.getConnection("jdbc:sqlite:C://Users/willj/IdeaProjects/untitled/school.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:school.db");
             String sql = "update User set loggedIn=0";
             conn.createStatement().executeUpdate(sql);
 

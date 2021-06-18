@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DBNavigator.Project.DataEditorManager">
     <record-view-column-sorting-type value="BY_INDEX" />
-    <value-preview-text-wrapping value="false" />
+    <value-preview-text-wrapping value="true" />
     <value-preview-pinned value="false" />
   </component>
   <component name="DBNavigator.Project.DataExportManager">
@@ -17,35 +17,29 @@
       <scope value="GLOBAL" />
       <destination value="FILE" />
       <format value="EXCEL" />
-      <charset value="windows-1252" />
+      <charset value="UTF-8" />
     </export-instructions>
   </component>
   <component name="DBNavigator.Project.DatabaseBrowserManager">
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes />
+    <loaded-nodes>
+      <connection connection-id="239ae3d9-0219-4fad-972c-49030812952d">
+        <schema name="main" object-types="table, view, constraint, index, column, dataset trigger" />
+      </connection>
+    </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
-    <connection id="bb01c634-00c7-42b0-ad69-a1be13b9dc8d">
-      <console name="school" type="STANDARD" schema="main" session="Main"><![CDATA[CREATE TABLE UserType (
-    uuid int,
-    name varchar(255)
-);
-
-CREATE TABLE User (
-    uuid int,
-    username varchar(255),
-    userTypeID int,
-	FOREIGN KEY(userTypeID) REFERENCES UserType(uuid)
-);]]></console>
+    <connection id="239ae3d9-0219-4fad-972c-49030812952d">
+      <console name="Connection" type="STANDARD" schema="" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
-    <connection id="bb01c634-00c7-42b0-ad69-a1be13b9dc8d" />
+    <connection id="239ae3d9-0219-4fad-972c-49030812952d" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
@@ -54,7 +48,7 @@ CREATE TABLE User (
     <retain-sticky-names value="false" />
   </component>
   <component name="DBNavigator.Project.FileConnectionMappingManager">
-    <mapping file-url="file://$PROJECT_DIR$/SchoolUpdate.sql" connection-id="bb01c634-00c7-42b0-ad69-a1be13b9dc8d" session-id="MAIN" current-schema="" />
+    <mapping file-url="file://$PROJECT_DIR$/SchoolUpdate.sql" connection-id="239ae3d9-0219-4fad-972c-49030812952d" session-id="MAIN" current-schema="main" />
   </component>
   <component name="DBNavigator.Project.MethodExecutionManager">
     <method-browser />
@@ -76,10 +70,10 @@ CREATE TABLE User (
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
-      <connection id="bb01c634-00c7-42b0-ad69-a1be13b9dc8d" active="true">
+      <connection id="239ae3d9-0219-4fad-972c-49030812952d" active="true">
         <database>
-          <name value="school" />
-          <description value="OOP Module project database" />
+          <name value="School" />
+          <description value="" />
           <database-type value="SQLITE" />
           <config-type value="BASIC" />
           <database-version value="3.34" />
@@ -87,11 +81,11 @@ CREATE TABLE User (
           <driver-library value="" />
           <driver value="" />
           <url-type value="FILE" />
-          <host value="localhost" />
-          <port value="1234" />
-          <database value="database" />
+          <host value="" />
+          <port value="" />
+          <database value="" />
           <files>
-            <file path="../../\school.db" schema="main" />
+            <file path="$PROJECT_DIR$/school.db" schema="main" />
           </files>
           <type value="NONE" />
           <user value="" />

@@ -47,7 +47,7 @@ public class CreateTests extends Application {
         ObservableList<String> options = FXCollections.observableArrayList();
         classes = new ComboBox(options);
         try {
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:C://Users/willj/IdeaProjects/untitled/school.db");
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:school.db");
             String sql = "SELECT * FROM SchoolClass;";
             Statement stmt  = conn.createStatement();
             ResultSet rs    = stmt.executeQuery(sql);
@@ -213,7 +213,7 @@ public class CreateTests extends Application {
             //save the test by serialization
             int testCount = 0;
             try {
-                Connection conn = DriverManager.getConnection("jdbc:sqlite:C://Users/willj/IdeaProjects/untitled/school.db");
+                Connection conn = DriverManager.getConnection("jdbc:sqlite:school.db");
                 String sql = "SELECT count(*) AS total FROM Test;";
                 Statement stmt  = conn.createStatement();
                 ResultSet rs    = stmt.executeQuery(sql);
@@ -221,7 +221,7 @@ public class CreateTests extends Application {
                     testCount = rs.getInt("total");
                 }
                 conn.close();
-                conn = DriverManager.getConnection("jdbc:sqlite:C://Users/willj/IdeaProjects/untitled/school.db");
+                conn = DriverManager.getConnection("jdbc:sqlite:school.db");
                 sql = "INSERT INTO Test(uuid, schoolClassID) VALUES("+(testCount+1)+", "+(classes.getSelectionModel().getSelectedIndex()+1)+")";
                 stmt  = conn.createStatement();
                 stmt.executeUpdate(sql);
@@ -241,8 +241,9 @@ public class CreateTests extends Application {
                     }
                     if ( questions.get(i).getClass() == TestQuestionText.class ) {
                         TestQuestionText question = (TestQuestionText)questions.get(i);
-                        conn = DriverManager.getConnection("jdbc:sqlite:C://Users/willj/IdeaProjects/untitled/school.db");
-                        sql = "INSERT INTO TestQuestionText(uuid, questionNum, testID, question, answer) VALUES(1, "+i+", "+(testCount+1)+", "+question.getQuestion()+", "+question.getAnswer()+")";
+                        conn = DriverManager.getConnection("jdbc:sqlite:school.db");
+                        sql = "INSERT INTO TestQuestionText(questionNum, testID, question, answer) VALUES("+i+", "+(testCount+1)+", '"+question.getQuestion()+"', '"+question.getAnswer()+"')";
+                        System.out.println(sql);
                         stmt  = conn.createStatement();
                         stmt.executeUpdate(sql);
                         conn.close();

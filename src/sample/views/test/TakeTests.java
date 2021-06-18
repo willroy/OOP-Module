@@ -38,7 +38,7 @@ public class TakeTests extends Application {
         int userTypeID = 0;
         int schoolClassID = 0;
         try {
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:C://Users/willj/IdeaProjects/untitled/school.db");
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:school.db");
             String sql = "SELECT uuid, username, password FROM User where loggedIn = 1";
             Statement stmt  = conn.createStatement();
             ResultSet rs    = stmt.executeQuery(sql);
