@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3044ebd7-f402-4931-a6fd-cf112de5c45d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/javafx.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/javafx.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report.rtf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/views/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/views/Login.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.~lock.report.odt#" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/oop_module.iml" beforeDir="false" afterPath="$PROJECT_DIR$/oop_module.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/school.db" beforeDir="false" afterPath="$PROJECT_DIR$/school.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/views/test/CreateTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/views/test/CreateTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/views/test/TakeTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/views/test/TakeTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +40,15 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.OOP_Module">
+    <configuration name="Login" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="sample.views.Login" />
+      <module name="oop_module" />
+      <option name="VM_PARAMETERS" value="--module-path $USER_HOME$/lib/javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="OOP_Module" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="16" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />

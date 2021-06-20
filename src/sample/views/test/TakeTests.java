@@ -79,6 +79,7 @@ public class TakeTests extends Application {
                 while (questionsMultichoice.next()) {
                     List<String> incorrectAnswers = Arrays.asList(questionsMultichoice.getString("incorrectAnswers").split(",", -1));
                     List<String> correctAnswers = Arrays.asList(questionsMultichoice.getString("correctAnswers").split(",", -1));
+
                     TestQuestionMultichoice tmpquestion = new TestQuestionMultichoice(questionsMultichoice.getString("question"), incorrectAnswers, correctAnswers);
                     tmpquestion.setQuestionNum(questionsMultichoice.getInt("questionNum"));
                     questions.add(tmpquestion);
@@ -124,7 +125,6 @@ public class TakeTests extends Application {
         datePicker.setOnAction(new EventHandler() {
             public void handle(Event t) {
                 LocalDate date = datePicker.getValue();
-                System.err.println("Selected date: " + date);
             }
         });
 
@@ -188,11 +188,14 @@ public class TakeTests extends Application {
                 Label name = new Label(question.getQuestion());
                 List<Label> answerLabels = new ArrayList<Label>();
                 List<CheckBox> answerChecks = new ArrayList<CheckBox>();
+                System.out.println(question.getCorrectAnswers().size());
                 for (int a = 0; a < question.getCorrectAnswers().size(); a++) {
+                    System.out.println("> "+question.getCorrectAnswers().get(a));
                     answerLabels.add(new Label(question.getCorrectAnswers().get(a)));
                     answerChecks.add(new CheckBox());
                 }
                 for (int a = 0; a < question.getIncorrectAnswers().size(); a++) {
+                    System.out.println(">> "+question.getIncorrectAnswers().get(a));
                     answerLabels.add(new Label(question.getIncorrectAnswers().get(a)));
                     answerChecks.add(new CheckBox());
                 }
@@ -210,6 +213,11 @@ public class TakeTests extends Application {
                 grid.add(answerLabels.get(numbers.get(1)), 0, 3+height);
                 grid.add(answerLabels.get(numbers.get(2)), 0, 4+height);
                 grid.add(answerLabels.get(numbers.get(3)), 0, 5+height);
+
+                System.out.println(answerLabels.get(numbers.get(0)));
+                System.out.println(answerLabels.get(numbers.get(1)));
+                System.out.println(answerLabels.get(numbers.get(2)));
+                System.out.println(answerLabels.get(numbers.get(3)));
 
                 grid.add(answerChecks.get(numbers.get(0)), 1, 2+height);
                 grid.add(answerChecks.get(numbers.get(1)), 1, 3+height);

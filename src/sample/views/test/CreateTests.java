@@ -160,9 +160,10 @@ public class CreateTests extends Application {
                 if ( comboBox.getSelectionModel().getSelectedItem() == "Multi-Select" ) {
                     List<String> incorrectAnswers = new ArrayList<String>();
                     List<String> correctAnswers = new ArrayList<String>();
-                    for (int i = 0; i < 4; i++) {
-                        if (multiChecks.get(i).isSelected()) { correctAnswers.add(multiTexts.get(i).getText()); }
-                        if (!multiChecks.get(i).isSelected()) { incorrectAnswers.add(multiTexts.get(i).getText()); }
+                    for (int i = 1; i < 5; i++) {
+                        System.out.println(">>>>>> "+multiTexts.get(i).getText());
+                        if (multiChecks.get(i-1).isSelected()) { correctAnswers.add(multiTexts.get(i).getText()); }
+                        if (!multiChecks.get(i-1).isSelected()) { incorrectAnswers.add(multiTexts.get(i).getText()); }
                     }
                     TestQuestionMultichoice question = new TestQuestionMultichoice(multiTexts.get(0).getText(), incorrectAnswers, correctAnswers);
                     questions.add(question);
@@ -234,13 +235,13 @@ public class CreateTests extends Application {
                         String correctAnswers = "";
                         for (int a = 0; a < question.getIncorrectAnswers().size(); a++) { incorrectAnswers = incorrectAnswers + question.getIncorrectAnswers().get(a) + ","; }
                         for (int a = 0; a < question.getCorrectAnswers().size(); a++) { correctAnswers = correctAnswers + question.getCorrectAnswers().get(a) + ","; }
+                        incorrectAnswers = incorrectAnswers.substring(0, incorrectAnswers.length() - 1);
+                        correctAnswers = correctAnswers.substring(0, correctAnswers.length() - 1);
                         sql = "INSERT INTO TestQuestionMultichoice(questionNum, testID, question, incorrectAnswers, correctAnswers) " +
                                 "VALUES("+i+", "+(testCount+1)+", '"+question.getQuestion()+"', '"+incorrectAnswers+"', '"+correctAnswers+"')";
-                        System.out.println(sql);
                         stmt  = conn.createStatement();
                         stmt.executeUpdate(sql);
                         conn.close();
-                        System.out.println("2");
                     }
                     if ( questions.get(i).getClass() == TestQuestionText.class ) {
                         TestQuestionText question = (TestQuestionText)questions.get(i);
