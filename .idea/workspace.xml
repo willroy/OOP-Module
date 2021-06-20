@@ -5,21 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3044ebd7-f402-4931-a6fd-cf112de5c45d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/sample/views/DBLoginManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sample/views/LoginManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sample/views/TestApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/javafx.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/javafx.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.~lock.report.odt#" beforeDir="false" afterPath="$PROJECT_DIR$/.~lock.report.odt#" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SchoolUpdate.sql" beforeDir="false" afterPath="$PROJECT_DIR$/SchoolUpdate.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/oop_module.iml" beforeDir="false" afterPath="$PROJECT_DIR$/oop_module.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/report.odt" beforeDir="false" afterPath="$PROJECT_DIR$/report.odt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/school.db" beforeDir="false" afterPath="$PROJECT_DIR$/school.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/models/test/TestQuestion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/models/test/TestQuestion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/models/test/TestQuestionMultichoice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/models/test/TestQuestionMultichoice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/models/test/TestQuestionText.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/models/test/TestQuestionText.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/views/Home.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/views/Home.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/views/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/views/Login.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sample/views/test/TakeTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/views/test/TakeTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/views/test/CreateTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/views/test/CreateTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/views/test/ViewTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/views/test/ViewTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -70,7 +63,7 @@
       <recent name="sample.views.test" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.OOP_Module">
+  <component name="RunManager" selected="Application.Login">
     <configuration name="Login" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="sample.views.Login" />
       <module name="oop_module" />

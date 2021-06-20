@@ -101,6 +101,7 @@ public class ViewTests extends Application {
         grid.setHgap(10);
         grid.setVgap(12);
 
+        //get the list of results
         try {
             Connection conn = DriverManager.getConnection("jdbc:sqlite:school.db");
             String sql = "SELECT * FROM Result where testID = "+testID+";";
@@ -109,9 +110,11 @@ public class ViewTests extends Application {
             int count = 0;
             while ( rs.next() ) {
                 count++;
+                //gor each result set a label to the first name, lastname and display
                 Label label = new Label("Result " + count + ", " + rs.getString("firstName") + " " + rs.getString("lastName"));
                 Button taketest = new Button("View Result");
                 int finalCount = count;
+                //set action for accessing the view for the specific result
                 taketest.setOnAction(e -> viewResult(primaryStage, testID, finalCount));
                 grid.add(label, 0, count);
                 grid.add(taketest, 1, count);
@@ -132,11 +135,13 @@ public class ViewTests extends Application {
 
     public void viewResult(Stage primaryStage, int testID, int resultID) {
         try {
+            //set up connection to the database
             Connection conn = DriverManager.getConnection("jdbc:sqlite:school.db");
-
+            //get list of answers from the result in the database
             ResultSet answersText  = conn.createStatement().executeQuery("SELECT * FROM TestQuestionText where resultID='"+resultID+"' ORDER BY questionNum");
             ResultSet answersMultichoice  = conn.createStatement().executeQuery("SELECT * FROM TestQuestionMultichoice where resultID='"+resultID+"' ORDER BY questionNum");
 
+            //get list of answers based on answers
             List<TestQuestion> answers = new ArrayList<TestQuestion>();
             while (answersText.next()) {
                 TestQuestionText tmpanswer = new TestQuestionText(answersText.getString("question"), answersText.getString("answer"));
@@ -144,6 +149,7 @@ public class ViewTests extends Application {
                 answers.add(tmpanswer);
             }
 
+            //set up list of answers by adding to a list based on the text answers.
             while (answersMultichoice.next()) {
                 List<String> incorrectAnswers = Arrays.asList(answersMultichoice.getString("incorrectAnswers").split(",", -1));
                 List<String> correctAnswers = Arrays.asList(answersMultichoice.getString("correctAnswers").split(",", -1));
@@ -152,10 +158,10 @@ public class ViewTests extends Application {
                 tmpanswer.setQuestionNum(answersMultichoice.getInt("questionNum"));
                 answers.add(tmpanswer);
             }
-
+            //sort answers so that they are in order of the question numbers
             answers.sort(Comparator.comparing(TestQuestion::getQuestionNum));
 
-
+            //get out questions from sql results table
             ResultSet questionsText  = conn.createStatement().executeQuery("SELECT * FROM TestQuestionText where testID='"+testID+"' AND ( resultID IS NULL or resultID=0 ) ORDER BY questionNum");
             ResultSet questionsMultichoice  = conn.createStatement().executeQuery("SELECT * FROM TestQuestionMultichoice where testID='"+testID+"' AND ( resultID IS NULL or resultID=0 ) ORDER BY questionNum");
 
@@ -226,9 +232,5 @@ public class ViewTests extends Application {
             System.out.println(e.getMessage());
         }
         //add test questions to the questions classes
-
-
-
-
     }
 }

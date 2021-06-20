@@ -19,21 +19,22 @@ import java.sql.*;
 import java.util.List;
 
 public class Home extends TestApplication {
-    private Application login;
-
+    //main method to launch the application for javafx
     public static void main(String args[]) {
         launch(args);
     }
-
+    //start the screen
     public void start(Stage primaryStage) {
 
         User user = null;
         try {
+            //get the currently logged in user and their details
             Connection conn = DriverManager.getConnection("jdbc:sqlite:school.db");
             String sql = "SELECT * FROM User where loggedIn = 1";
             Statement stmt  = conn.createStatement();
             ResultSet rs    = stmt.executeQuery(sql);
             while (rs.next()) {
+                //create the user object for ease of use in the code
                 user = new User(rs.getString("username"), rs.getString("password"), rs.getInt("userTypeID"), rs.getInt("schoolClassID"), true);
             }
             conn.close();
@@ -47,7 +48,7 @@ public class Home extends TestApplication {
         Button viewTests = new Button("View Tests");
         Button takeTest = new Button("Tests");
         Button exit = new Button("Exit");
-
+        //set what each button will take you to
         createTest.setOnAction(e->createTest(primaryStage));
         viewTests.setOnAction(e->viewTests(primaryStage));
         takeTest.setOnAction(e->takeTest(primaryStage));
@@ -68,7 +69,7 @@ public class Home extends TestApplication {
             grid.add(takeTest,0,0);
         }
         grid.add(exit, 0, 11);
-
+        //create scene
         Scene scene = new Scene(grid, 300, 250);
         scene.getStylesheets().add("sample/stylesheet.css");
         //show scene

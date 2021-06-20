@@ -63,11 +63,11 @@ public class CreateTests extends Application {
         Button addQuestion = new Button("Add Question");
         Button save = new Button("Save");
         Button exit = new Button("Back");
-
+        //set up methods for what each button calls
         addQuestion.setOnAction(e -> createQuestion(primaryStage));
         save.setOnAction(e -> back(primaryStage));
         exit.setOnAction(e -> exit(primaryStage));
-
+        //create gridpane for displaying buttons
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(12);
@@ -76,7 +76,7 @@ public class CreateTests extends Application {
 
         grid.setPadding(new Insets(10, 10, 10, 10));
 
-
+        //add buttons
         grid.add(addQuestion, 0, 0);
         grid.add(classes, 0, 1);
         grid.add(save, 3, 0);
@@ -150,7 +150,7 @@ public class CreateTests extends Application {
                 }
             }
         });
-
+        //create buttons for save and quit
         Button save = new Button("Save");
         Button quit = new Button("Back");
 
@@ -214,6 +214,7 @@ public class CreateTests extends Application {
             //save the test by sql database
             int testCount = 0;
             try {
+                //get the test number that it is on
                 Connection conn = DriverManager.getConnection("jdbc:sqlite:school.db");
                 String sql = "SELECT count(*) AS total FROM Test;";
                 Statement stmt  = conn.createStatement();
@@ -223,12 +224,14 @@ public class CreateTests extends Application {
                 }
                 conn.close();
                 conn = DriverManager.getConnection("jdbc:sqlite:school.db");
+                //create the test in the database
                 sql = "INSERT INTO Test(uuid, schoolClassID) VALUES("+(testCount+1)+", "+(classes.getSelectionModel().getSelectedIndex()+1)+")";
                 stmt  = conn.createStatement();
                 stmt.executeUpdate(sql);
                 int resultNum = conn.createStatement().executeQuery("SELECT count(*) AS count FROM Result").getInt("count");
                 conn.close();
                 for (int i = 0; i < questions.size(); i++) {
+                    //if the question is a test multiple choice then add that question to the database
                     if ( questions.get(i).getClass() == TestQuestionMultichoice.class ) {
                         conn = DriverManager.getConnection("jdbc:sqlite:school.db");
                         TestQuestionMultichoice question = (TestQuestionMultichoice)questions.get(i);
@@ -244,6 +247,7 @@ public class CreateTests extends Application {
                         stmt.executeUpdate(sql);
                         conn.close();
                     }
+                    // if the question is a test text then add that question to the database
                     if ( questions.get(i).getClass() == TestQuestionText.class ) {
                         TestQuestionText question = (TestQuestionText)questions.get(i);
                         conn = DriverManager.getConnection("jdbc:sqlite:school.db");
