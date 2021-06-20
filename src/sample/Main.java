@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sample.views.DBLoginManager;
+import sample.views.Home;
 import sample.views.Login;
 
 public class Main {

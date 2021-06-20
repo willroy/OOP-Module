@@ -4,22 +4,13 @@ import java.io.Serializable;
 import java.util.List;
 
 public class TestQuestionMultichoice extends TestQuestion implements Serializable {
-    private String question;
     private List<String> incorrectAnswers;
     private List<String> correctAnswers;
 
     public TestQuestionMultichoice(String question, List<String> incorrectAnswers, List<String> correctAnswers) {
-        this.question = question;
+        super(question);
         this.incorrectAnswers = incorrectAnswers;
         this.correctAnswers = correctAnswers;
-    }
-
-    public String getQuestion() {
-        return this.question;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
     }
 
     public List<String> getIncorrectAnswers() {

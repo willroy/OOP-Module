@@ -64,18 +64,16 @@ public class Login extends Application {
 
             sql = "SELECT uuid, username, password FROM User where username='"+username+"' and password='"+password+"'";
             ResultSet rs  = conn.createStatement().executeQuery(sql);
-            while (rs.next()) {
-                System.out.println(rs.getInt("uuid") +  "\t" +
-                        rs.getString("username") + "\t" +
-                        rs.getString("password"));
+            if (rs.next()) {
+                sql = "update User set loggedIn=1 where username='"+username+"' and password='"+password+"'";
+                conn.createStatement().executeUpdate(sql);
+
+                conn.close();
+
+                Home home = new Home();
+                home.start(primaryStage);
             }
-            sql = "update User set loggedIn=1 where username='"+username+"' and password='"+password+"'";
-            conn.createStatement().executeUpdate(sql);
 
-            conn.close();
-
-            Home home = new Home();
-            home.start(primaryStage);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

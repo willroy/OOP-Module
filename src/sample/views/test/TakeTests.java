@@ -124,9 +124,10 @@ public class TakeTests extends Application {
         TextField firstName = new TextField("FirstName");
         TextField lastName = new TextField("LastName");
         final DatePicker datePicker = new DatePicker();
+        final LocalDate[] dob = {null};
         datePicker.setOnAction(new EventHandler() {
             public void handle(Event t) {
-                LocalDate date = datePicker.getValue();
+                dob[0] = datePicker.getValue();
             }
         });
 
@@ -138,7 +139,7 @@ public class TakeTests extends Application {
         grid.add(next, 0, 4);
 
         //once next is clicked, then the test starts
-        next.setOnAction(e -> {takeTest(primaryStage, test, schoolClass, currentTestNumber, testID);});
+        next.setOnAction(e -> {takeTest(primaryStage, test, schoolClass, currentTestNumber, testID, firstName.getText(), lastName.getText(), dob[0]);});
 
         grid.setPadding(new Insets(10, 10, 10, 10));
         Scene scene = new Scene(grid, 300, 250);
@@ -148,7 +149,7 @@ public class TakeTests extends Application {
         primaryStage.show();
     }
 
-    public void takeTest(Stage primaryStage, Test test, int schoolClass, int currentTestNumber, int testID) {
+    public void takeTest(Stage primaryStage, Test test, int schoolClass, int currentTestNumber, int testID, String firstName, String lastName, LocalDate dob) {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(12);
@@ -236,7 +237,7 @@ public class TakeTests extends Application {
 
         //when submitted, the answers are then taken to end the test, where they are saved.
         Button next = new Button("Submit");
-        next.setOnAction(e->endTest(primaryStage, test, schoolClass, TextQuestionAnswers, MultichoiceQuestionAnswers, MultichoiceQuestions, currentTestNumber, testID));
+        next.setOnAction(e->endTest(primaryStage, test, schoolClass, TextQuestionAnswers, MultichoiceQuestionAnswers, MultichoiceQuestions, currentTestNumber, testID, firstName, lastName, dob));
         grid.add(next, 0, 0);
 
         ScrollPane root = new ScrollPane();
@@ -254,7 +255,7 @@ public class TakeTests extends Application {
 
     }
 
-    public void endTest(Stage primaryStage, Test test, int schoolClass, List<TextField> TextQuestionAnswers, List<List<CheckBox>> MultichoiceQuestionAnswers, List<List<Label>> MultichoiceQuestions, int currentTestNumber, int testID) {
+    public void endTest(Stage primaryStage, Test test, int schoolClass, List<TextField> TextQuestionAnswers, List<List<CheckBox>> MultichoiceQuestionAnswers, List<List<Label>> MultichoiceQuestions, int currentTestNumber, int testID, String firstName, String lastName, LocalDate dob) {
         //create new answers list, similiar to how the test questions are stored.
         List<TestQuestion> answers = new ArrayList<TestQuestion>();
 
@@ -290,22 +291,18 @@ public class TakeTests extends Application {
                 countMultiQuestion++;
             }
         }
-
-        System.out.println(answers.size());
-        //finally, create a result which has all the information for a users test experience
-        Result result = new Result(schoolClass, user, answers, firstName, lastName, dob);
         //save the test result
         save(primaryStage, test, schoolClass, currentTestNumber, testID, firstName, lastName, dob, answers);
     }
 
     public void save(Stage primaryStage, Test test, int schoolClass, int currentTestNumber, int testID, String firstName, String lastName, LocalDate dob, List<TestQuestion> answers) {
         //first create a new test that the old test object will be built on top off
-        Test savedtest = new Test(schoolClass, false, test.getQuestions());
 
 
         try {
             Connection conn = DriverManager.getConnection("jdbc:sqlite:school.db");
-            String sql = "INSERT INTO Result(schoolClassID, testID, firstname, lastname, DoB) VALUES("+schoolClass+", "+testID+", "+firstName+", "+lastName+", "+dob+")";
+            String sql = "INSERT INTO Result(schoolClassID, testID, firstname, lastname, DoB) VALUES("+schoolClass+", "+testID+", '"+firstName+"', '"+lastName+"', "+dob+")";
+            System.out.println(sql);
             Statement stmt  = conn.createStatement();
             stmt.executeUpdate(sql);
             int resultNum = conn.createStatement().executeQuery("SELECT count(*) AS count FROM Result;").getInt("count");
@@ -342,6 +339,8 @@ public class TakeTests extends Application {
             System.out.println(e.getMessage());
         }
 
+        Test savedtest = new Test(schoolClass, false, test.getQuestions());
+
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(12);
@@ -350,7 +349,6 @@ public class TakeTests extends Application {
         for (int i = 0; i < savedtest.getQuestions().size(); i++) {
             if (savedtest.getQuestions().get(i) instanceof TestQuestionText) {
                 TestQuestionText question = (TestQuestionText)savedtest.getQuestions().get(i);
-                int numberOfResults = savedtest.getResults().size();
                 TestQuestionText answer = (TestQuestionText)answers.get(i);
                 if ( question.getAnswer().equals(answer.getAnswer()) ) {
                     Label label = new Label("Question "+(i+1)+" , " + "Correct");
@@ -363,10 +361,9 @@ public class TakeTests extends Application {
 
             if (savedtest.getQuestions().get(i) instanceof TestQuestionMultichoice) {
                 TestQuestionMultichoice question = (TestQuestionMultichoice)savedtest.getQuestions().get(i);
-                int numberOfResults = savedtest.getResults().size();
                 TestQuestionMultichoice answer = (TestQuestionMultichoice)answers.get(i);
                 question.getCorrectAnswers();
-                if ( question.getCorrectAnswers().get(0) == answer.getCorrectAnswers().get(0) ) {
+                if ( question.getCorrectAnswers().get(0).equals(answer.getCorrectAnswers().get(0)) ) {
                     Label label = new Label("Question "+(i+1)+" , " + "Correct");
                     grid.add(label, 0, 1+i);
                 } else {

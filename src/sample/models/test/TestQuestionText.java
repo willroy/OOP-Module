@@ -12,14 +12,6 @@ public class TestQuestionText extends TestQuestion implements Serializable {
         this.answer = answer;
     }
 
-    public String getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
     public String getAnswer() {
         return this.answer;
     }

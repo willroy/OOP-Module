@@ -182,7 +182,6 @@ public class ViewTests extends Application {
             grid.setVgap(12);
 
             //test answers to see if they are correct
-            System.out.println(questions.size());
             for (int i = 0; i < questions.size(); i++) {
                 if (questions.get(i) instanceof TestQuestionText) {
                     TestQuestionText question = (TestQuestionText)questions.get(i);
@@ -199,7 +198,10 @@ public class ViewTests extends Application {
                     TestQuestionMultichoice question = (TestQuestionMultichoice)questions.get(i);
                     TestQuestionMultichoice answer = (TestQuestionMultichoice)answers.get(i);
                     question.getCorrectAnswers();
-                    if ( question.getCorrectAnswers().get(0) == answer.getCorrectAnswers().get(0) ) {
+                    System.out.println(question.getCorrectAnswers().get(0));
+                    System.out.println(answer.getCorrectAnswers().get(0));
+                    System.out.println();
+                    if ( question.getCorrectAnswers().get(0).equals(answer.getCorrectAnswers().get(0)) ) {
                         Label label = new Label("Question "+(i+1)+" , " + "Correct");
                         grid.add(label, 0, 1+i);
                     } else {

@@ -18,7 +18,9 @@ import java.io.ObjectInputStream;
 import java.sql.*;
 import java.util.List;
 
-public class Home extends Application {
+public class Home extends TestApplication {
+    private Application login;
+
     public static void main(String args[]) {
         launch(args);
     }
