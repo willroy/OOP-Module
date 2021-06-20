@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import sample.models.user.User;
 import sample.views.test.CreateTests;
 import sample.views.test.TakeTests;
+import sample.views.test.ViewTests;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -41,10 +42,12 @@ public class Home extends Application {
 
         //create all the buttons for all users
         Button createTest = new Button("Create Test");
+        Button viewTests = new Button("View Tests");
         Button takeTest = new Button("Tests");
         Button exit = new Button("Exit");
 
         createTest.setOnAction(e->createTest(primaryStage));
+        viewTests.setOnAction(e->viewTests(primaryStage));
         takeTest.setOnAction(e->takeTest(primaryStage));
         exit.setOnAction(e->back(primaryStage));
 
@@ -57,6 +60,7 @@ public class Home extends Application {
         //only display buttons that should display per user type
         if ( user.getUserTypeID() == 1 ){
             grid.add(createTest, 0, 0);
+            grid.add(viewTests, 0, 1);
         }
         if ( user.getUserTypeID() == 2 ){
             grid.add(takeTest,0,0);
@@ -75,6 +79,12 @@ public class Home extends Application {
         //launch create test menu
         CreateTests createTest = new CreateTests();
         createTest.start(primaryStage);
+    }
+
+    public void viewTests(Stage primaryStage) {
+        //launch view test menu
+        ViewTests viewTest = new ViewTests();
+        viewTest.start(primaryStage);
     }
 
     public void takeTest(Stage primaryStage) {

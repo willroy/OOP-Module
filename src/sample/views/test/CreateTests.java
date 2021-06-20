@@ -211,7 +211,7 @@ public class CreateTests extends Application {
     public void back(Stage primaryStage) {
 
         if ( !classes.getSelectionModel().isEmpty() ) {
-            //save the test by serialization
+            //save the test by sql database
             int testCount = 0;
             try {
                 Connection conn = DriverManager.getConnection("jdbc:sqlite:school.db");
@@ -226,6 +226,7 @@ public class CreateTests extends Application {
                 sql = "INSERT INTO Test(uuid, schoolClassID) VALUES("+(testCount+1)+", "+(classes.getSelectionModel().getSelectedIndex()+1)+")";
                 stmt  = conn.createStatement();
                 stmt.executeUpdate(sql);
+                int resultNum = conn.createStatement().executeQuery("SELECT count(*) AS count FROM Result").getInt("count");
                 conn.close();
                 for (int i = 0; i < questions.size(); i++) {
                     if ( questions.get(i).getClass() == TestQuestionMultichoice.class ) {
@@ -237,8 +238,8 @@ public class CreateTests extends Application {
                         for (int a = 0; a < question.getCorrectAnswers().size(); a++) { correctAnswers = correctAnswers + question.getCorrectAnswers().get(a) + ","; }
                         incorrectAnswers = incorrectAnswers.substring(0, incorrectAnswers.length() - 1);
                         correctAnswers = correctAnswers.substring(0, correctAnswers.length() - 1);
-                        sql = "INSERT INTO TestQuestionMultichoice(questionNum, testID, question, incorrectAnswers, correctAnswers) " +
-                                "VALUES("+i+", "+(testCount+1)+", '"+question.getQuestion()+"', '"+incorrectAnswers+"', '"+correctAnswers+"')";
+                        sql = "INSERT INTO TestQuestionMultichoice(questionNum, testID, resultID, question, incorrectAnswers, correctAnswers) " +
+                                "VALUES("+i+", "+(testCount+1)+", "+resultNum+", '"+question.getQuestion()+"', '"+incorrectAnswers+"', '"+correctAnswers+"')";
                         stmt  = conn.createStatement();
                         stmt.executeUpdate(sql);
                         conn.close();
@@ -246,7 +247,8 @@ public class CreateTests extends Application {
                     if ( questions.get(i).getClass() == TestQuestionText.class ) {
                         TestQuestionText question = (TestQuestionText)questions.get(i);
                         conn = DriverManager.getConnection("jdbc:sqlite:school.db");
-                        sql = "INSERT INTO TestQuestionText(questionNum, testID, question, answer) VALUES("+i+", "+(testCount+1)+", '"+question.getQuestion()+"', '"+question.getAnswer()+"')";
+                        sql = "INSERT INTO TestQuestionText(questionNum, testID, resultID, question, answer) " +
+                                "VALUES("+i+", "+(testCount+1)+", "+resultNum+", '"+question.getQuestion()+"', '"+question.getAnswer()+"')";
                         System.out.println(sql);
                         stmt  = conn.createStatement();
                         stmt.executeUpdate(sql);

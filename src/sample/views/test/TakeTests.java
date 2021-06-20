@@ -17,6 +17,7 @@ import java.io.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.Date;
 
 public class TakeTests extends Application {
     private User user;
@@ -64,8 +65,8 @@ public class TakeTests extends Application {
 
                 //get test questions
 
-                ResultSet questionsText  = conn.createStatement().executeQuery("SELECT * FROM TestQuestionText where testID='"+rs.getInt("uuid")+"' ORDER BY questionNum");
-                ResultSet questionsMultichoice  = conn.createStatement().executeQuery("SELECT * FROM TestQuestionMultichoice where testID='"+rs.getInt("uuid")+"' ORDER BY questionNum");
+                ResultSet questionsText  = conn.createStatement().executeQuery("SELECT * FROM TestQuestionText where testID='"+rs.getInt("uuid")+"' AND ( resultID IS NULL or resultID=0 ) ORDER BY questionNum");
+                ResultSet questionsMultichoice  = conn.createStatement().executeQuery("SELECT * FROM TestQuestionMultichoice where testID='"+rs.getInt("uuid")+"' AND ( resultID IS NULL or resultID=0 ) ORDER BY questionNum");
 
                 //add test questions to the questions classes
 
@@ -93,7 +94,8 @@ public class TakeTests extends Application {
                 int currentTestNumber = count;
                 Test currentTest = new Test(schoolClassID, true, questions);
                 int finalSchoolClassID = schoolClassID;
-                takeTest.setOnAction(e ->takeDetails(primaryStage, currentTest, finalSchoolClassID, currentTestNumber));
+                int testID = rs.getInt("uuid");
+                takeTest.setOnAction(e ->takeDetails(primaryStage, currentTest, finalSchoolClassID, currentTestNumber, testID));
                 grid.add(label, 0, count);
                 grid.add(takeTest, 1, count);
 
@@ -112,7 +114,7 @@ public class TakeTests extends Application {
         primaryStage.show();
     }
 
-    public void takeDetails(Stage primaryStage, Test test, int schoolClass, int currentTestNumber) {
+    public void takeDetails(Stage primaryStage, Test test, int schoolClass, int currentTestNumber, int testID) {
         //launch the details screen for taking the users details
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -136,7 +138,7 @@ public class TakeTests extends Application {
         grid.add(next, 0, 4);
 
         //once next is clicked, then the test starts
-        next.setOnAction(e -> {takeTest(primaryStage, test, schoolClass, currentTestNumber);});
+        next.setOnAction(e -> {takeTest(primaryStage, test, schoolClass, currentTestNumber, testID);});
 
         grid.setPadding(new Insets(10, 10, 10, 10));
         Scene scene = new Scene(grid, 300, 250);
@@ -146,7 +148,7 @@ public class TakeTests extends Application {
         primaryStage.show();
     }
 
-    public void takeTest(Stage primaryStage, Test test, int schoolClass, int currentTestNumber) {
+    public void takeTest(Stage primaryStage, Test test, int schoolClass, int currentTestNumber, int testID) {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(12);
@@ -234,7 +236,7 @@ public class TakeTests extends Application {
 
         //when submitted, the answers are then taken to end the test, where they are saved.
         Button next = new Button("Submit");
-        next.setOnAction(e->endTest(primaryStage, test, schoolClass, TextQuestionAnswers, MultichoiceQuestionAnswers, MultichoiceQuestions, currentTestNumber));
+        next.setOnAction(e->endTest(primaryStage, test, schoolClass, TextQuestionAnswers, MultichoiceQuestionAnswers, MultichoiceQuestions, currentTestNumber, testID));
         grid.add(next, 0, 0);
 
         ScrollPane root = new ScrollPane();
@@ -252,7 +254,7 @@ public class TakeTests extends Application {
 
     }
 
-    public void endTest(Stage primaryStage, Test test, int schoolClass, List<TextField> TextQuestionAnswers, List<List<CheckBox>> MultichoiceQuestionAnswers, List<List<Label>> MultichoiceQuestions, int currentTestNumber) {
+    public void endTest(Stage primaryStage, Test test, int schoolClass, List<TextField> TextQuestionAnswers, List<List<CheckBox>> MultichoiceQuestionAnswers, List<List<Label>> MultichoiceQuestions, int currentTestNumber, int testID) {
         //create new answers list, similiar to how the test questions are stored.
         List<TestQuestion> answers = new ArrayList<TestQuestion>();
 
@@ -293,28 +295,51 @@ public class TakeTests extends Application {
         //finally, create a result which has all the information for a users test experience
         Result result = new Result(schoolClass, user, answers, firstName, lastName, dob);
         //save the test result
-        save(primaryStage, test, schoolClass, result, currentTestNumber);
+        save(primaryStage, test, schoolClass, currentTestNumber, testID, firstName, lastName, dob, answers);
     }
 
-    public void save(Stage primaryStage, Test test, int schoolClass, Result result, int currentTestNumber) {
+    public void save(Stage primaryStage, Test test, int schoolClass, int currentTestNumber, int testID, String firstName, String lastName, LocalDate dob, List<TestQuestion> answers) {
         //first create a new test that the old test object will be built on top off
         Test savedtest = new Test(schoolClass, false, test.getQuestions());
+
+
         try {
-            //get the test that was just taken and add the results onto the new test
-            File directory=new File("Tests");
-            FileOutputStream fileOut = new FileOutputStream("Tests/test"+currentTestNumber+".ser");
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            //null check the results to handle the first result
-            List<Result> results = new ArrayList<Result>();
-            if ( savedtest.getResults() != null ) { results = savedtest.getResults(); }
-            results.add(result);
-            savedtest.setResults(results);
-            out.writeObject(test);
-            out.close();
-            fileOut.close();
-            System.out.printf("Serialized data is saved in test"+currentTestNumber+".ser");
-        } catch (IOException i) {
-            i.printStackTrace();
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:school.db");
+            String sql = "INSERT INTO Result(schoolClassID, testID, firstname, lastname, DoB) VALUES("+schoolClass+", "+testID+", "+firstName+", "+lastName+", "+dob+")";
+            Statement stmt  = conn.createStatement();
+            stmt.executeUpdate(sql);
+            int resultNum = conn.createStatement().executeQuery("SELECT count(*) AS count FROM Result;").getInt("count");
+            conn.close();
+            for (int i = 0; i < answers.size(); i++) {
+                if ( answers.get(i).getClass() == TestQuestionMultichoice.class ) {
+                    conn = DriverManager.getConnection("jdbc:sqlite:school.db");
+                    TestQuestionMultichoice question = (TestQuestionMultichoice)answers.get(i);
+                    String incorrectAnswers = "";
+                    String correctAnswers = "";
+                    for (int a = 0; a < question.getIncorrectAnswers().size(); a++) { incorrectAnswers = incorrectAnswers + question.getIncorrectAnswers().get(a) + ","; }
+                    for (int a = 0; a < question.getCorrectAnswers().size(); a++) { correctAnswers = correctAnswers + question.getCorrectAnswers().get(a) + ","; }
+                    incorrectAnswers = incorrectAnswers.substring(0, incorrectAnswers.length() - 1);
+                    correctAnswers = correctAnswers.substring(0, correctAnswers.length() - 1);
+                    sql = "INSERT INTO TestQuestionMultichoice(questionNum, testID, resultID, question, incorrectAnswers, correctAnswers) " +
+                            "VALUES("+i+", "+testID+", "+resultNum+", '"+question.getQuestion()+"', '"+incorrectAnswers+"', '"+correctAnswers+"')";
+                    stmt  = conn.createStatement();
+                    stmt.executeUpdate(sql);
+                    conn.close();
+                }
+                if ( answers.get(i).getClass() == TestQuestionText.class ) {
+                    TestQuestionText question = (TestQuestionText)answers.get(i);
+                    conn = DriverManager.getConnection("jdbc:sqlite:school.db");
+                    sql = "INSERT INTO TestQuestionText(questionNum, testID, resultID, question, answer) " +
+                            "VALUES("+i+", "+testID+", "+resultNum+", '"+question.getQuestion()+"', '"+question.getAnswer()+"')";
+                    System.out.println(sql);
+                    stmt  = conn.createStatement();
+                    stmt.executeUpdate(sql);
+                    conn.close();
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
 
         GridPane grid = new GridPane();
@@ -326,15 +351,11 @@ public class TakeTests extends Application {
             if (savedtest.getQuestions().get(i) instanceof TestQuestionText) {
                 TestQuestionText question = (TestQuestionText)savedtest.getQuestions().get(i);
                 int numberOfResults = savedtest.getResults().size();
-                TestQuestionText answer = (TestQuestionText)result.getAnswers().get(i);
-                System.out.println("Question " + question.getAnswer());
-                System.out.println("AnswerU " + answer.getAnswer());
+                TestQuestionText answer = (TestQuestionText)answers.get(i);
                 if ( question.getAnswer().equals(answer.getAnswer()) ) {
-                    System.out.println("true");
                     Label label = new Label("Question "+(i+1)+" , " + "Correct");
                     grid.add(label, 0, 1+i);
                 } else {
-                    System.out.println("false");
                     Label label = new Label("Question "+(i+1)+" , " + "Incorrect");
                     grid.add(label, 0, 1+i);
                 }
@@ -343,14 +364,12 @@ public class TakeTests extends Application {
             if (savedtest.getQuestions().get(i) instanceof TestQuestionMultichoice) {
                 TestQuestionMultichoice question = (TestQuestionMultichoice)savedtest.getQuestions().get(i);
                 int numberOfResults = savedtest.getResults().size();
-                TestQuestionMultichoice answers = (TestQuestionMultichoice)result.getAnswers().get(i);
+                TestQuestionMultichoice answer = (TestQuestionMultichoice)answers.get(i);
                 question.getCorrectAnswers();
-                if ( question.getCorrectAnswers().get(0) == answers.getCorrectAnswers().get(0) ) {
-                    System.out.println("true");
+                if ( question.getCorrectAnswers().get(0) == answer.getCorrectAnswers().get(0) ) {
                     Label label = new Label("Question "+(i+1)+" , " + "Correct");
                     grid.add(label, 0, 1+i);
                 } else {
-                    System.out.println("false");
                     Label label = new Label("Question "+(i+1)+" , " + "Incorrect");
                     grid.add(label, 0, 1+i);
                 }

@@ -46,7 +46,7 @@ CREATE TABLE Test (
 );
 
 CREATE TABLE Result (
-    uuid int PRIMARY KEY,
+    uuid integer PRIMARY KEY autoincrement,
     schoolClassID int,
     testID int,
     firstName varchar(250),
@@ -57,20 +57,25 @@ CREATE TABLE Result (
 );
 
 CREATE TABLE TestQuestionText (
-    uuid int PRIMARY KEY autoincrement,
+    uuid integer PRIMARY KEY autoincrement,
     questionNum int,
     testID int,
+    resultID int,
     question varchar(250),
     answer varchar(250),
 	FOREIGN KEY(testID) REFERENCES Test(uuid)
 );
 
 CREATE TABLE TestQuestionMultichoice (
-    uuid int PRIMARY KEY autoincrement,
+    uuid integer PRIMARY KEY autoincrement,
     questionNum int,
     testID int,
+    resultID int,
     question varchar(250),
     incorrectAnswers varchar(250),
     correctAnswers varchar(250),
 	FOREIGN KEY(testID) REFERENCES Test(uuid)
 );
+
+select * from "TestQuestionMultichoice";
+select * from "TestQuestionText";
